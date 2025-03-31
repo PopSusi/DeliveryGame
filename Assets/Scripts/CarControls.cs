@@ -77,7 +77,7 @@ public class CarControls : MonoBehaviour
     {
         rb.maxLinearVelocity = effectiveMaxMoveSpeed;
         rb.maxAngularVelocity = effectiveTurnSpeed;
-        Camera.transform.position = transform.position + baseCamOffset + (transform.forward * -1f * math.remap(-effectiveMaxMoveSpeed, effectiveMaxMoveSpeed, -1f, 1f, rb.linearVelocity.magnitude));
+        Camera.transform.position = transform.position + baseCamOffset + (transform.forward * -1f * math.remap(-effectiveMaxMoveSpeed, effectiveMaxMoveSpeed, -2f, 2f, rb.linearVelocity.magnitude));
 
         // --- Movement Input --//
         //W moves van forward, S moves backward, is equal to the transform.forward of the van
@@ -109,7 +109,7 @@ public class CarControls : MonoBehaviour
         {
             if (turningForce == 0) turningForce = initialTurnBurst * moveVec.x;
             turningForce = Mathf.Clamp(turningForce + turnAccel * moveVec.x, -maxTurnAccel, maxTurnAccel) * (math.remap(2f, effectiveMaxMoveSpeed, minTurnForceMod, 1f, Mathf.Clamp(rb.linearVelocity.magnitude, 2f, effectiveMaxMoveSpeed)));
-            Debug.Log(turningForce);
+            //Debug.Log(turningForce);
             //Debug.Log("Not zero somehow");
         }
         else
@@ -121,7 +121,7 @@ public class CarControls : MonoBehaviour
             {
                 turningForce = Mathf.Clamp(turningForce + Time.fixedDeltaTime * noTurnInputDeccel, -maxTurnAccel, 0f);
             }
-            Debug.Log(turningForce);
+            //Debug.Log(turningForce);
             
         }
         rb.AddTorque(new Vector3(0f, turningForce * 50, 0f));
