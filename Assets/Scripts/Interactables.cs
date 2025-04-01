@@ -1,39 +1,42 @@
 using UnityEngine;
 
-public class Interactables : MonoBehaviour
+public abstract class Interactables : MonoBehaviour
 {
-    bool pickedup;
+    public delegate void BreakOffEvent(GameObject dropoff);
+    public static event BreakOffEvent BreakOff;
+
+    protected static Camera cam;
+    protected static GameObject player;
+    public GameObject image;
+    protected MeshRenderer imageMesh;
+
     [SerializeField]
-    public GameObject pickupSocket;
-    [SerializeField]
-    public Collider pickupCollider;
-    [SerializeField]
-    public Collider physicalCollider;
+    protected Component[] components;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
+    protected void Awake()
+    { 
+
+        player = FindAnyObjectByType<InteractControls>().gameObject;
+        imageMesh = image.GetComponent<MeshRenderer>();
+        imageMesh.enabled = false;
+        cam = FindAnyObjectByType<Camera>();
+        image.transform.LookAt(cam.transform);
+        image.transform.Rotate(90, 180, 180);
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        image.transform.LookAt(cam.transform);
+        image.transform.Rotate(90, 180, 180);
     }
 
-    public virtual GameObject Interact()
+    public abstract GameObject Interact();
+
+    public void Break(GameObject passthrough)
     {
-        pickedup = true;
-        pickupCollider.enabled = false;
-        physicalCollider.enabled = true;
-        return gameObject;
+        BreakOff(passthrough);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (pickedup)
-        {
-            Debug.Log("BREAK!");
-        }
-    }
+    //public abstract void Activate();
 }

@@ -4,14 +4,6 @@ using Unity.Mathematics;
 
 public class CarControls : MonoBehaviour
 {
-    PlayerInput input;
-    Rigidbody rb;
-    InputAction moveAction;
-    InputAction brakeAction;
-    Vector2 moveVec;
-    float speedForce;
-    float turningForce;
-
     [SerializeField]
     [Header("Movement")]
     float initialMoveBurst = 40f;
@@ -58,8 +50,15 @@ public class CarControls : MonoBehaviour
 
 
     //Script only
-    float effectiveTurnSpeed = 3f;
-    float effectiveMaxMoveSpeed = 10f;
+    float lastVelocity = 0f;
+    PlayerInput input;
+    Rigidbody rb;
+    InputAction moveAction;
+    InputAction brakeAction;
+    InteractControls interactControls;
+    Vector2 moveVec;
+    float speedForce;
+    float turningForce;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -68,6 +67,7 @@ public class CarControls : MonoBehaviour
         rb.maxLinearVelocity = maxMoveSpeed;
         rb.maxAngularVelocity = maxTurnSpeed;
         input = GetComponent<PlayerInput>();
+        interactControls = GetComponent<InteractControls>();
         moveAction = input.actions["Move"];
         brakeAction = input.actions["Brake"];
     }
@@ -75,9 +75,7 @@ public class CarControls : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        rb.maxLinearVelocity = effectiveMaxMoveSpeed;
-        rb.maxAngularVelocity = effectiveTurnSpeed;
-        Camera.transform.position = transform.position + baseCamOffset + (transform.forward * -1f * math.remap(-effectiveMaxMoveSpeed, effectiveMaxMoveSpeed, -2f, 2f, rb.linearVelocity.magnitude));
+        Camera.transform.position = transform.position + baseCamOffset + (transform.forward * -1f * math.remap(-maxMoveSpeed, maxMoveSpeed, -2f, 2f, rb.linearVelocity.magnitude));
 
         // --- Movement Input --//
         //W moves van forward, S moves backward, is equal to the transform.forward of the van
@@ -108,7 +106,7 @@ public class CarControls : MonoBehaviour
         if (moveVec.x > 0 || moveVec.x < 0)
         {
             if (turningForce == 0) turningForce = initialTurnBurst * moveVec.x;
-            turningForce = Mathf.Clamp(turningForce + turnAccel * moveVec.x, -maxTurnAccel, maxTurnAccel) * (math.remap(2f, effectiveMaxMoveSpeed, minTurnForceMod, 1f, Mathf.Clamp(rb.linearVelocity.magnitude, 2f, effectiveMaxMoveSpeed)));
+            turningForce = Mathf.Clamp(turningForce + turnAccel * moveVec.x, -maxTurnAccel, maxTurnAccel) * (math.remap(2f, maxMoveSpeed, minTurnForceMod, 1f, Mathf.Clamp(rb.linearVelocity.magnitude, 2f, maxMoveSpeed)));
             //Debug.Log(turningForce);
             //Debug.Log("Not zero somehow");
         }
@@ -127,6 +125,13 @@ public class CarControls : MonoBehaviour
         rb.AddTorque(new Vector3(0f, turningForce * 50, 0f));
         //Debug.Log(turningForce);
         //Debug.Log(rb.angularVelocity);
+
+        if(lastVelocity - rb.linearVelocity.magnitude > 2f)
+        {
+            interactControls.DettachObjectStack(lastVelocity - rb.linearVelocity.magnitude);
+            Debug.Log(lastVelocity - rb.linearVelocity.magnitude);
+        }
+        lastVelocity = rb.linearVelocity.magnitude;
     }
 
 }
