@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -26,7 +27,16 @@ public class MissionManager : MonoBehaviour
     // Update is called once per frame
     void Start()
     {
-        newMissionAttempt();
+        StartCoroutine("LoopSpawn");
+    }
+
+    IEnumerator LoopSpawn()
+    {
+        while (true)
+        {
+            newMissionAttempt();
+            yield return new WaitForSeconds(2f);
+        }
     }
 
     bool newMissionAttempt()
@@ -40,18 +50,21 @@ public class MissionManager : MonoBehaviour
         MissionInfoTotal total = new MissionInfoTotal();
         Missions missionChosen = missions[Random.Range(0, missions.Count)];
         total.info = missionChosen.info;
-        Debug.Log(total.info.missionText);
+        //Debug.Log(total.info.missionText);
         GameObject spawn = SpawnManager._instance.FindAvailableSpawn(-1);
-        Debug.Log(spawn.name);
+        //Debug.Log(spawn.name);
+        Streets dropEnum;
         if (spawn != null)
         {
             total.spawnLocation = SpawnManager._instance.FindAvailableSpawn(-1);
-            total.dropoffLocation = SpawnManager._instance.FindAvailableDropoff(-1);
+            total.dropoffLocation = SpawnManager._instance.FindAvailableDropoff(-1, out dropEnum);
             spawnedMissions.Add(total);
-            Instantiate(missionChosen.info.prefab, 
+            GameObject spawnObject = Instantiate(missionChosen.info.prefab, 
                 total.spawnLocation.transform.position,
                 total.spawnLocation.transform.rotation);
             total.dropoffLocation.GetComponent<Dropoffs>().Activate();
+            total.dropoffEnum = dropEnum;
+            spawnObject.GetComponent<PickUps>().missionData = total;
             return true;
         }
         return false;

@@ -14,6 +14,11 @@ public class InteractControls : MonoBehaviour
     [SerializeField]
     public GameObject initialPickupSocket;
 
+    [SerializeField]
+    GameObject listHold;
+    [SerializeField]
+    List<ObjectVarsHolder> ListofTemplates = new List<ObjectVarsHolder>();
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -63,11 +68,11 @@ public class InteractControls : MonoBehaviour
             //Debug.Log(interactItem.layer);
             if (interactItem.layer == 6)
             {
-                ;
                 ThingsToCheck.Remove((PickUps)thingToInteractWith);
                 HeldObjects.Add((PickUps)thingToInteractWith);
                 //AttachObject(pickedUp);
                 interactItem.layer = 8;
+                UpdateUI();
             }
             else if (interactItem.layer == 7)
             {
@@ -75,7 +80,28 @@ public class InteractControls : MonoBehaviour
                 //Destroy(interactItem);
                 DettachTopObject(interactItem);
             }
+            //UpdateUI();
         }
+    }
+
+    void UpdateUI()
+    {
+        int i = 0;
+        foreach (Interactables obj in HeldObjects)
+        {
+            ListofTemplates[i].InitialLoad(HeldObjects[i].publicName, HeldObjects[i].missionData.dropoffEnum.ToString() + "Street");
+            i++;
+        }
+        int j = 0;
+        foreach(ObjectVarsHolder obj in ListofTemplates)
+        {
+            if (j >= i)
+            {
+                obj.Wipe();
+            }
+            j++;
+        }
+        Debug.Log(i);
     }
 
     void AttachObject(GameObject pickUpObj)
@@ -108,6 +134,7 @@ public class InteractControls : MonoBehaviour
                 drop.AddComponent<Rigidbody>();
             }
         }
+        UpdateUI();
     }
     public void DettachObjectStack()
     {
@@ -122,6 +149,7 @@ public class InteractControls : MonoBehaviour
                 drop.AddComponent<Rigidbody>();
             }
         }
+        UpdateUI();
     }
 
     public void DettachObjectStack(float force)
@@ -138,6 +166,7 @@ public class InteractControls : MonoBehaviour
             }
         }
         Debug.Log(HeldObjects.Count - (int)math.floor(math.remap(2f, 8f, 0, HeldObjects.Count - 1, force)));
+        UpdateUI();
     }
 
     void DettachTopObject(GameObject dropoffPoint)
@@ -149,6 +178,7 @@ public class InteractControls : MonoBehaviour
             drop.transform.position = dropoffPoint.transform.position;
             drop.transform.rotation = dropoffPoint.transform.rotation;
         }
+        UpdateUI();
     }
 
     void ObjectUpdate()

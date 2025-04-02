@@ -7,7 +7,8 @@ public enum Streets
     Red,
     Green,
     Blue,
-    Brown
+    Brown,
+    Debug
 }
 
 public enum Ratings
@@ -37,6 +38,7 @@ public struct MissionInfoTotal
     public MissionInfoSO info;
     public GameObject spawnLocation;
     public GameObject dropoffLocation;
+    public Streets dropoffEnum;
 }
 
 

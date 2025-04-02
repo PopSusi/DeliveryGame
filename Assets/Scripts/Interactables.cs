@@ -9,6 +9,7 @@ public abstract class Interactables : MonoBehaviour
     protected static GameObject player;
     public GameObject image;
     protected MeshRenderer imageMesh;
+    public string publicName;
 
     [SerializeField]
     protected Component[] components;

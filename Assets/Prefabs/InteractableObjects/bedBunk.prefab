@@ -275,6 +275,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 6059240247994152141}
+  publicName: Bunk Bed
+  components: []
   pickedup: 0
   pickupSocket: {fileID: 6913589716160560648}
   pickupCollider: {fileID: 400659720729547508}

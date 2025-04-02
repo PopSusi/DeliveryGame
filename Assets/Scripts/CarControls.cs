@@ -129,7 +129,7 @@ public class CarControls : MonoBehaviour
         if(lastVelocity - rb.linearVelocity.magnitude > 2f)
         {
             interactControls.DettachObjectStack(lastVelocity - rb.linearVelocity.magnitude);
-            Debug.Log(lastVelocity - rb.linearVelocity.magnitude);
+            //Debug.Log(lastVelocity - rb.linearVelocity.magnitude);
         }
         lastVelocity = rb.linearVelocity.magnitude;
     }

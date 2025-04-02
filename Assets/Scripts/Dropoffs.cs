@@ -41,6 +41,6 @@ public class Dropoffs : Interactables
     {
         GetComponentInChildren<Renderer>().enabled = true;
         GetComponent<Collider>().enabled = true;
-        Debug.Log("Activating");
+        //Debug.Log("Activating");
     }
 }

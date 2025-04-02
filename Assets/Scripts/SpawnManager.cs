@@ -18,6 +18,18 @@ public class SpawnManager : MonoBehaviour
     public List<GameObject> availableBlueDropOffs = new List<GameObject>();
     public List<GameObject> availableBrownDropOffs = new List<GameObject>();
 
+    public List<GameObject> unavailableYellowSpawnPoints = new List<GameObject>();
+    public List<GameObject> unavailableRedSpawnPoints = new List<GameObject>();
+    public List<GameObject> unavailableGreenSpawnPoints = new List<GameObject>();
+    public List<GameObject> unavailableBlueSpawnPoints = new List<GameObject>();
+    public List<GameObject> unavailableBrownSpawnPoints = new List<GameObject>();
+
+    public List<GameObject> unavailableYellowDropOffs = new List<GameObject>();
+    public List<GameObject> unavailableRedDropOffs = new List<GameObject>();
+    public List<GameObject> unavailableGreenDropOffs = new List<GameObject>();
+    public List<GameObject> unavailableBlueDropOffs = new List<GameObject>();
+    public List<GameObject> unavailableBrownDropOffs = new List<GameObject>();
+
     public static SpawnManager _instance;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -41,7 +53,7 @@ public class SpawnManager : MonoBehaviour
         if (streetPriority == -1)
         {
             streetPriority = UnityEngine.Random.Range(0, 5);
-            Debug.Log(streetPriority);
+            //Debug.Log(streetPriority);
         }
         GameObject spawnPoint = null;
         switch (streetPriority)
@@ -50,6 +62,8 @@ public class SpawnManager : MonoBehaviour
                 if (availableYellowSpawnPoints.Count != 0)
                 {
                     spawnPoint = availableYellowSpawnPoints[UnityEngine.Random.Range(0, availableYellowSpawnPoints.Count)];
+                    availableYellowSpawnPoints.Remove(spawnPoint);
+                    unavailableYellowSpawnPoints.Add(spawnPoint);
                 }
                 else
                 {
@@ -60,6 +74,8 @@ public class SpawnManager : MonoBehaviour
                 if (availableRedSpawnPoints.Count != 0)
                 {
                     spawnPoint = availableRedSpawnPoints[UnityEngine.Random.Range(0, availableRedSpawnPoints.Count)];
+                    availableRedSpawnPoints.Remove(spawnPoint);
+                    unavailableRedSpawnPoints.Add(spawnPoint);
                 }
                 else
                 {
@@ -70,6 +86,8 @@ public class SpawnManager : MonoBehaviour
                 if (availableGreenSpawnPoints.Count != 0)
                 {
                     spawnPoint = availableGreenSpawnPoints[UnityEngine.Random.Range(0, availableGreenSpawnPoints.Count)];
+                    availableGreenSpawnPoints.Remove(spawnPoint);
+                    unavailableGreenSpawnPoints.Add(spawnPoint);
                 }
                 else
                 {
@@ -80,6 +98,8 @@ public class SpawnManager : MonoBehaviour
                 if (availableBlueSpawnPoints.Count != 0)
                 {
                     spawnPoint = availableBlueSpawnPoints[UnityEngine.Random.Range(0, availableBlueSpawnPoints.Count)];
+                    availableBlueSpawnPoints.Remove(spawnPoint);
+                    unavailableBlueSpawnPoints.Add(spawnPoint);
                 }
                 else
                 {
@@ -90,6 +110,8 @@ public class SpawnManager : MonoBehaviour
                 if (availableBrownSpawnPoints.Count != 0)
                 {
                     spawnPoint = availableBrownSpawnPoints[UnityEngine.Random.Range(0, availableBrownSpawnPoints.Count)];
+                    availableBrownSpawnPoints.Remove(spawnPoint);
+                    unavailableBrownSpawnPoints.Add(spawnPoint);
                 }
                 else
                 {
@@ -99,8 +121,9 @@ public class SpawnManager : MonoBehaviour
         }
         return spawnPoint;
     }
-    public GameObject FindAvailableDropoff(int streetPriority)
+    public GameObject FindAvailableDropoff(int streetPriority, out Streets streetOut)
     {
+        streetOut = Streets.Debug;
         if (streetPriority == -1)
         {
             streetPriority = UnityEngine.Random.Range(0, 5);
@@ -113,54 +136,72 @@ public class SpawnManager : MonoBehaviour
                 if (availableYellowSpawnPoints.Count != 0)
                 {
                     spawnPoint = availableYellowDropOffs[UnityEngine.Random.Range(0, availableYellowDropOffs.Count)];
+                    availableYellowDropOffs.Remove(spawnPoint);
+                    unavailableYellowDropOffs.Add(spawnPoint);
+                    streetOut = Streets.Yellow;
                 }
                 else
                 {
-                    spawnPoint = FindAvailableDropoff(1);
+                    spawnPoint = FindAvailableDropoff(1, out streetOut);
                 }
                 break;
             case 1:
                 if (availableRedSpawnPoints.Count != 0)
                 {
                     spawnPoint = availableRedDropOffs[UnityEngine.Random.Range(0, availableRedDropOffs.Count)];
+                    availableRedDropOffs.Remove(spawnPoint);
+                    unavailableRedDropOffs.Add(spawnPoint);
+                    streetOut = Streets.Red;
                 }
                 else
                 {
-                    spawnPoint = FindAvailableDropoff(2);
+                    spawnPoint = FindAvailableDropoff(2, out streetOut);
                 }
                 break;
             case 2:
                 if (availableGreenSpawnPoints.Count != 0)
                 {
+                    streetOut = Streets.Green;
                     spawnPoint = availableGreenDropOffs[UnityEngine.Random.Range(0, availableGreenDropOffs.Count)];
+                    availableGreenDropOffs.Remove(spawnPoint);
+                    unavailableGreenDropOffs.Add(spawnPoint);
                 }
                 else
                 {
-                    spawnPoint = FindAvailableDropoff(3);
+                    spawnPoint = FindAvailableDropoff(3, out streetOut);
                 }
                 break;
             case 3:
                 if (availableBlueSpawnPoints.Count != 0)
                 {
+                    streetOut = Streets.Blue;
                     spawnPoint = availableBlueDropOffs[UnityEngine.Random.Range(0, availableBlueDropOffs.Count)];
+                    availableBlueDropOffs.Remove(spawnPoint);
+                    unavailableBlueDropOffs.Add(spawnPoint);
                 }
                 else
                 {
-                    spawnPoint = FindAvailableDropoff(4);
+                    spawnPoint = FindAvailableDropoff(4, out streetOut);
                 }
                 break;
             case 4:
                 if (availableBrownSpawnPoints.Count != 0)
                 {
+                    streetOut = Streets.Brown;
                     spawnPoint = availableBrownDropOffs[UnityEngine.Random.Range(0, availableBrownDropOffs.Count)];
+                    availableBrownDropOffs.Remove(spawnPoint);
+                    unavailableBrownDropOffs.Add(spawnPoint);
                 }
                 else
                 {
                     spawnPoint = null;
                 }
                 break;
+            default:
+                streetOut = Streets.Brown;
+                break;
         }
-        Debug.Log(spawnPoint.name);
+        //Debug.Log(spawnPoint.name);
         return spawnPoint;
     }
 }

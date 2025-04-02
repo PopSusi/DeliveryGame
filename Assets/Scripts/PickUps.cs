@@ -10,6 +10,8 @@ public class PickUps : Interactables
     public Collider pickupCollider;
     [SerializeField]
     public Collider physicalCollider;
+
+    public MissionInfoTotal missionData;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
