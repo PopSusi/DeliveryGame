@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
 using UnityEngine;
+using TMPro;
 
 public class MissionManager : MonoBehaviour
 {
@@ -12,6 +14,8 @@ public class MissionManager : MonoBehaviour
     public List<MissionInfoTotal> spawnedMissions = new List<MissionInfoTotal>();
     public List<MissionInfoTotal> activeMissions = new List<MissionInfoTotal>();
     List<Missions> missionsPool = new List<Missions>();
+    [SerializeField]
+    TextMeshProUGUI pointsText;
 
     public int points;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,6 +36,7 @@ public class MissionManager : MonoBehaviour
         {
             missionsPool.Add(mission);
         }
+        pointsText.text = "Points: " + points;
     }
 
 
@@ -102,7 +107,7 @@ public class MissionManager : MonoBehaviour
         {
             points += 0;
         }
-
+        pointsText.text = "Points: " + points;
         activeMissions.Remove(correctMission);
     }
 

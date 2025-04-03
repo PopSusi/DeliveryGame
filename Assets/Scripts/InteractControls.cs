@@ -88,13 +88,16 @@ public class InteractControls : MonoBehaviour
             //Debug.Log(interactItem.layer);
             if (interactItem.layer == 6)
             {
-                PickUps item = (PickUps)thingToInteractWith;
-                ThingsToCheck.Remove(item);
-                HeldObjects.Add((PickUps)item);
-                //AttachObject(pickedUp);
-                interactItem.layer = 8;
-                Grabbed(item.missionData);
-                UpdateUI();
+                if (HeldObjects.Count < 9)
+                {
+                    PickUps item = (PickUps)thingToInteractWith;
+                    ThingsToCheck.Remove(item);
+                    HeldObjects.Add((PickUps)item);
+                    //AttachObject(pickedUp);
+                    interactItem.layer = 8;
+                    Grabbed(item.missionData);
+                    UpdateUI();
+                }
             }
             else if (interactItem.layer == 7)
             {
