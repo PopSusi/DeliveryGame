@@ -7,6 +7,12 @@ using System.Linq;
 
 public class InteractControls : MonoBehaviour
 {
+    public delegate void DroppedOff(PickUps dropoff, Streets correctStreet);
+    public static event DroppedOff Delivered;
+
+    public delegate void Pickedup(MissionInfoTotal dropoff);
+    public static event Pickedup Grabbed;
+
     PlayerInput input;
     List<Interactables> ThingsToCheck = new List<Interactables>();
     List<PickUps> HeldObjects = new List<PickUps>();
@@ -19,14 +25,26 @@ public class InteractControls : MonoBehaviour
     [SerializeField]
     List<ObjectVarsHolder> ListofTemplates = new List<ObjectVarsHolder>();
 
+
+    public static InteractControls _instance;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+
         input = GetComponent<PlayerInput>();
         input.actions["Interact"].performed += Interact;
         Interactables.BreakOff += DettachObjectStack;
     }
-
+    
+    //Update positions of objects
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -37,6 +55,8 @@ public class InteractControls : MonoBehaviour
 
     }
 
+    //When we press the interact key we go through our list of objects that we are currently overlapping and then get the closest one.
+    // If the closest item is on the pickup layer, we know its a pickup, and vice versa with the dropoff layer
     void Interact(InputAction.CallbackContext context)
     {
         float closestDistance = 10f;
@@ -68,22 +88,27 @@ public class InteractControls : MonoBehaviour
             //Debug.Log(interactItem.layer);
             if (interactItem.layer == 6)
             {
-                ThingsToCheck.Remove((PickUps)thingToInteractWith);
-                HeldObjects.Add((PickUps)thingToInteractWith);
+                PickUps item = (PickUps)thingToInteractWith;
+                ThingsToCheck.Remove(item);
+                HeldObjects.Add((PickUps)item);
                 //AttachObject(pickedUp);
                 interactItem.layer = 8;
+                Grabbed(item.missionData);
                 UpdateUI();
             }
             else if (interactItem.layer == 7)
             {
                 Debug.Log("Dropoff");
                 //Destroy(interactItem);
+
+                Delivered(HeldObjects[HeldObjects.Count - 1], interactItem.GetComponent<Dropoffs>().street);
                 DettachTopObject(interactItem);
             }
             //UpdateUI();
         }
     }
 
+    //Updates the list of objects on the left-hand side of the screen
     void UpdateUI()
     {
         int i = 0;
@@ -104,6 +129,7 @@ public class InteractControls : MonoBehaviour
         Debug.Log(i);
     }
 
+    //Deprecated code which childed the pickupObj to the truck - led to weird control bugs cause Rigidbody tries to adjust for the new meshes
     void AttachObject(GameObject pickUpObj)
     {
         if (HeldObjects.Count != 0)
@@ -121,12 +147,13 @@ public class InteractControls : MonoBehaviour
         HeldObjects.Add(pickUpObj.GetComponent<PickUps>());
     }
 
-    void DettachObjectStack(GameObject dropoff)
+    //Dettach code when an object hits something
+    void DettachObjectStack(GameObject breakingPoint)
     {
         if (HeldObjects.Count > 0)
         {
             //Debug.Log(dropoff.gameObject.name);
-            for (int i = HeldObjects.IndexOf(dropoff.GetComponent<PickUps>()); i < HeldObjects.Count; i++)
+            for (int i = HeldObjects.IndexOf(breakingPoint.GetComponent<PickUps>()); i < HeldObjects.Count; i++)
             {
                 GameObject drop = HeldObjects[i].gameObject;
                 drop.GetComponent<PickUps>().ResetVars();
@@ -136,6 +163,7 @@ public class InteractControls : MonoBehaviour
         }
         UpdateUI();
     }
+    //Dettach code when its the whole fucking stack
     public void DettachObjectStack()
     {
         if (HeldObjects.Count > 0)
@@ -151,7 +179,7 @@ public class InteractControls : MonoBehaviour
         }
         UpdateUI();
     }
-
+    //Dettach code when the car crashes - the amount of items drops depends on the force of the crash
     public void DettachObjectStack(float force)
     {
         if (HeldObjects.Count > 0)
@@ -169,6 +197,7 @@ public class InteractControls : MonoBehaviour
         UpdateUI();
     }
 
+    //Dettach code when droppingoff and item
     void DettachTopObject(GameObject dropoffPoint)
     {
         if (HeldObjects.Count > 0)

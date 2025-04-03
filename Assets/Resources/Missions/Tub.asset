@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: acce6df531348664f9bd102f311e0c2c, type: 3}
-  m_Name: BunkBed
+  m_Name: Tub
   m_EditorClassIdentifier: 
   info:
-    prefab: {fileID: 7498641397538932917, guid: 2aff5edb5b181d64ea3bfbdc15f9adc1, type: 3}
+    prefab: {fileID: 6534378011595201084, guid: ddd1e8a6c1d6b56488d0a3e11e636a37, type: 3}
     initialWorth: 2500
     secondsUntilBad: 250
     worthWhenBad: 100
-    missionText: Someone's Sleepy!
+    missionText: Sudsy

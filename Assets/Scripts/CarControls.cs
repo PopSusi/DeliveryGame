@@ -72,13 +72,15 @@ public class CarControls : MonoBehaviour
         brakeAction = input.actions["Brake"];
     }
 
-    // Update is called once per frame
+    //This is going to be a lot of math and Im very sorry
     void FixedUpdate()
     {
+        //Affix camera correctly
         Camera.transform.position = transform.position + baseCamOffset + (transform.forward * -1f * math.remap(-maxMoveSpeed, maxMoveSpeed, -2f, 2f, rb.linearVelocity.magnitude));
 
         // --- Movement Input --//
         //W moves van forward, S moves backward, is equal to the transform.forward of the van
+
         moveVec = moveAction.ReadValue<Vector2>();
         Vector3 direction = transform.forward;
         if (moveVec.y > 0 || moveVec.y < 0)

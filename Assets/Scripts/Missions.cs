@@ -11,6 +11,8 @@ public enum Streets
     Debug
 }
 
+
+// Never got to implement this :/
 public enum Ratings
 {
     Great,

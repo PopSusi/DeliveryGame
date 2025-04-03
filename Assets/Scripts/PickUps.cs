@@ -10,6 +10,8 @@ public class PickUps : Interactables
     public Collider pickupCollider;
     [SerializeField]
     public Collider physicalCollider;
+    [SerializeField]
+    int pickupIdentity;
 
     public MissionInfoTotal missionData;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -24,6 +26,7 @@ public class PickUps : Interactables
         
     }
 
+    // -- When grabbed, we want the rigidbody to be off so we can carry it (This also means collision is handled in OnTriggerEnter) and we dont want to see the UI Prompt
     public override GameObject Interact()
     {
         pickedup = true;
@@ -33,13 +36,16 @@ public class PickUps : Interactables
         return gameObject;
     }
 
+    // -- Called when it's dropped onto the ground. We want it to interact with the floor and be returned to the pickup layer so we can re-pick it up
     public void ResetVars()
     {
+        if (gameObject.GetComponent<Rigidbody>() == null) gameObject.AddComponent<Rigidbody>();
         pickedup = false;
         pickupCollider.enabled = true;
         gameObject.layer = 6;
     }
 
+    // -- If its on the truck (pickedup) and we hit something, we wanna drop it. This calls the Break event which drops itself and items above it in the stack (this function is in the InteractControls script)
     private void OnTriggerEnter(Collider other)
     {
         if (pickedup)
@@ -48,6 +54,7 @@ public class PickUps : Interactables
         }
         else
         {
+            //Turn on pickup prompt if it's near
             if(other.gameObject == player)
             {
                 imageMesh.enabled = true;
@@ -56,6 +63,7 @@ public class PickUps : Interactables
     }
     private void OnTriggerExit(Collider other)
     {
+        //Turn off pickup prompt if it's away
         if (other.gameObject == player)
         {
             imageMesh.enabled = false;

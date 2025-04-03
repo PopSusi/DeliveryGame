@@ -16,6 +16,8 @@ public class ObjectVarsHolder : MonoBehaviour
     {
         Wipe();
     }
+
+    //Used when making the UI seen on screen
     public void InitialLoad(string item_, string dropoff)
     {
         //Debug.Log(placeInStack);
@@ -31,11 +33,14 @@ public class ObjectVarsHolder : MonoBehaviour
         location.text = dropoff;
     }
 
+    //Clears the UI of itself/only one icon - called when Dettaches happen
     public void Wipe(){
         item.text = "";
         location.text = "";
         image.enabled = false;
     }
+
+    //Ignore this vvvv
     // Update is called once per frame
     /*
     public void stackUpdate(int newPlaceInStack)

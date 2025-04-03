@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: acce6df531348664f9bd102f311e0c2c, type: 3}
-  m_Name: BunkBed
+  m_Name: Sink
   m_EditorClassIdentifier: 
   info:
-    prefab: {fileID: 7498641397538932917, guid: 2aff5edb5b181d64ea3bfbdc15f9adc1, type: 3}
+    prefab: {fileID: 6553043177196293607, guid: bab6a0fb868a35047b686eeabf0a4d17, type: 3}
     initialWorth: 2500
     secondsUntilBad: 250
     worthWhenBad: 100
-    missionText: Someone's Sleepy!
+    missionText: Wash your hands, freak.

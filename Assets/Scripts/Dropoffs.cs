@@ -2,7 +2,11 @@ using UnityEngine;
 
 public class Dropoffs : Interactables
 {
+    [SerializeField]
+    public Streets street;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // So we can see in editor, we just hide it once the game starts
     new void Awake()
     {
         base.Awake();
@@ -37,6 +41,7 @@ public class Dropoffs : Interactables
         }
     }
 
+    //When used by the MissionManager we turn on visibility
     public void Activate()
     {
         GetComponentInChildren<Renderer>().enabled = true;

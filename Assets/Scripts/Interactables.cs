@@ -5,6 +5,7 @@ public abstract class Interactables : MonoBehaviour
     public delegate void BreakOffEvent(GameObject dropoff);
     public static event BreakOffEvent BreakOff;
 
+
     protected static Camera cam;
     protected static GameObject player;
     public GameObject image;
@@ -26,9 +27,12 @@ public abstract class Interactables : MonoBehaviour
     }
 
     // Update is called once per frame
+    
+    //Update code so prompt looks at screen/camera
     void FixedUpdate()
     {
         image.transform.LookAt(cam.transform);
+        //NECESSARY TO MAKE IT LOOK AT CAMERA CORRECTLY I HATE UNITY
         image.transform.Rotate(90, 180, 180);
     }
 
